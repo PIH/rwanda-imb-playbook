@@ -1,0 +1,68 @@
+# Install User Tomcat and Group
+- name: Users | Create {{ tomcat_group }} group
+  group: name={{ tomcat_group }} state=present
+
+- name: Users | Create {{ tomcat_user }} user
+  user: name={{ tomcat_user }} group={{ tomcat_group }} state=present shell=/bin/false createhome=false
+
+# Download and install tomcat package
+- name: Tomcat | Download and unzip
+  unarchive: src={{ tomcat_url }} dest=/tmp remote_src=yes
+
+- name: Tomcat | Install tomcat package
+  shell: rm -fR {{ tomcat_home }} && mv /tmp/{{ tomcat_package }} {{ tomcat_home }}
+
+- name: Tomcat | Ensure no default webapps are installed
+  shell: rm -fR {{ tomcat_home }}/webapps/*
+
+- name: Tomcat | Ensure work directory is empty
+  shell: rm -fR {{ tomcat_home }}/work/*
+
+- name: Tomcat | Ensure temp directory is empty
+  shell: rm -fR {{ tomcat_home }}/temp/*
+
+- name: Tomcat | Ensure {{ tomcat_home }} dir has the correct user and group
+  shell: chown -R  {{ tomcat_user }}:{{ tomcat_user }} {{ tomcat_home }}
+
+- name: Tomcat | Ensure the tomcat bin files are executable
+  shell: chmod 0755 {{ tomcat_home }}/bin/*.sh
+
+# Ensure ownership is set up correctly
+
+- name: Tomcat | Ensure that tomcat has the correct file ownerships
+  file: path={{ tomcat_home }} state=directory
+- name: Tomcat | Ensure that tomcat_work has the correct file ownerships
+  file: path={{ tomcat_home }}/work state=directory recurse=yes mode=0755 owner={{ tomcat_user }} group={{ tomcat_group }}
+- name: Tomcat | Ensure that tomcat_webapps has the correct file ownerships
+  file: path={{ tomcat_home }}/webapps state=directory recurse=yes mode=0755 owner={{ tomcat_user }} group={{ tomcat_group }}
+- name: Tomcat | Ensure that tomcat_logs has the correct file ownerships
+  file: path={{ tomcat_home }}/logs state=directory recurse=yes mode=0755 owner={{ tomcat_user }} group={{ tomcat_group }}
+
+# configure Tomcat
+- name: Tomcat | Ensure settings.xml file is installed
+  template: src=settings.xml.j2 dest=/tmp/settings.xml owner={{ tomcat_user }} group={{ tomcat_group }}
+
+- name: Tomcat | Configure "setenv.sh"
+  template:
+    src: setenv.j2
+    dest: "{{ tomcat_home }}/bin/setenv.sh"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: 0755
+
+- name: Tomcat | Configure "server.xml"
+  template:
+    src: "server.xml-{{ tomcat_package }}.j2"
+    dest: "{{ tomcat_home }}/conf/server.xml"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: 0644
+
+- name: Tomcat | Configure service
+  template: src=service.j2 dest="/etc/systemd/system/{{ tomcat_user }}.service"
+
+- name: Tomcat | Create Unit file
+  template: src=service.j2 dest=/lib/systemd/system/{{ tomcat_user }}.service mode=644
+
+- name: Tomcat | Start Tomcat
+  service: name={{ tomcat_user }}.service state=started enabled=yes

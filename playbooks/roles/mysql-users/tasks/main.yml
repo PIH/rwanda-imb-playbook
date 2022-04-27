@@ -1,0 +1,18 @@
+- name: Ensure anonymous users are not in the database
+  mysql_user: user='' host=$item state=absent
+  with_items:
+      - 127.0.0.1
+      - ::1
+      - localhost
+
+- name: OpenMRS Database | Create openmrs user for mysql
+  mysql_user: user="innocent" host="localhost" password='K@bulanolak2oTW' priv=*.*:ALL,GRANT
+
+- name: OpenMRS Database | Create openmrs user for mysql
+  mysql_user: user="jberchmas" host="10.160.20.234" password='G@1Axy!' priv=*.*:ALL,GRANT
+
+- name: Create openmrs user for mysql
+  mysql_user: user="jbyiringiro" host="10.160.20.231" password='G@1Axy!' priv=openmrs.*:SELECT,INSERT,UPDATE,CREATE,ALTER,INDEX
+
+- name: Create openmrs user for mysql
+  mysql_user: user="tanderson" host="10.160.20.237" password='G@1Axy!' priv=openmrs.*:SELECT

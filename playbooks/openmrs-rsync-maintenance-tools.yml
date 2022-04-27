@@ -1,0 +1,50 @@
+- hosts: all
+  become: yes
+  gather_facts: false
+  vars_files:
+      - ../vars/all_vars.yml
+
+  tasks:
+  - group: name={{ maintainance_group_name }} state=present
+
+  - user: name={{  maintainance_username }} password={{ maintainance_password }} home={{ maintainance_home_dir }} group={{ maintainance_group_name }} shell=/bin/bash
+
+  - lineinfile: dest=/etc/sudoers state=present line='{{ maintainance_username }} ALL=(ALL) NOPASSWD:ALL' validate='visudo -cf %s'
+
+  - name: Maintance Tool | create .ssh dir
+    file: path={{ maintainance_home_dir }}/.ssh state=directory owner={{  maintainance_username }} mode=0600
+
+  - copy: src=roles/rwanda-maintenance/files/authorized_keys dest={{ maintainance_home_dir }}/.ssh owner={{ maintainance_username }}
+
+  - name: Maintance Tool | Remove "{{ maintainance_home_dir }}/maintenance" (git will re-create this folder)
+    command: rm -rf {{ maintainance_home_dir }}/maintenance
+
+  - git:
+      repo: "{{ maintainance_git_url }}"
+      dest: "{{ maintainance_home_dir }}/maintenance"
+
+  - name: Creates directories
+    file:
+      path: "{{ maintainance_home_dir }}/maintenance/{{ item }}"
+      state: directory
+      owner:  "{{ maintainance_username }}"
+    with_items:
+       - openmrs_modules
+       - openmrs_war
+       - other_files
+       - trusted_sql
+
+  - name: Maintance Tool | Remove "{{ maintainance_home_dir }}/maintenance/playbook"
+    command: rm -rf {{ maintainance_home_dir }}/maintenance/playbook
+
+  - name: Maintance Tool | Remove "{{ maintainance_home_dir }}/maintenance/README.md"
+    command: rm -rf {{ maintainance_home_dir }}/maintenance/README.md
+
+  - name: Maintance Tool | Remove git dir
+    command: rm -rf {{ maintainance_home_dir }}/maintenance/.git
+
+  - name: Maintance Tool | Remove gitignore file
+    command: rm -rf {{ maintainance_home_dir }}/maintenance/.gitignore
+
+  - name: Maintance Tool | Ensure "{{ maintainance_home_dir }}" has the correct ownership
+    command: chown -R {{  maintainance_username }}:{{  maintainance_username }} {{ maintainance_home_dir }}

@@ -1,0 +1,6 @@
+- name: Install apache
+  apt: name={{item}} state=present
+  with_items:
+    - apache2
+    - apache2-bin
+    - libapache2-mod-jk

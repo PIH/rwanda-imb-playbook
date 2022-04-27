@@ -1,0 +1,34 @@
+# Configure and install mysql
+
+- name: Set MySQL root password
+  debconf: name=mysql-server question=mysql-server/root_password value={{ mysql_root_password }} vtype=password
+  no_log: true
+
+- name: Confirm MySQL root password
+  debconf: name=mysql-server question=mysql-server/root_password_again value={{ mysql_root_password }} vtype=password
+  no_log: true
+
+- name: Install MySQL and Tools for accessing it
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - "{{ mysql_version }}"
+    - "python3-pymysql"
+
+- name: Configure MySQL
+  template:
+    src: mysqld.cnf.j2
+    dest: "/etc/mysql/mysql.conf.d/mysqld.cnf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: yes
+
+# Now that the root password is set to the specified, make it default for the client.
+- name: Copy my.cnf
+  template:
+    src: root_my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+    force: yes

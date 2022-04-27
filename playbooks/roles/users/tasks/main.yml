@@ -1,0 +1,20 @@
+# python -c 'import crypt; print crypt.crypt("Password","$1$SomeSalt")'
+
+- name: create ssh group
+  group: name={{ ssh_users }} state=present
+
+- name: Add user {{ username }}
+  user:
+    name={{ item }}
+    password={{ password }}
+    groups="{{ sudo_group  }}"
+    shell=/bin/bash
+    append=yes
+    createhome=yes
+  with_items:
+    - "{{ username }}"
+
+- name: Ask user "{{ username }}" to change password upon login
+  shell: chage -d 0 "{{ item }}"
+  with_items:
+      - "{{username}}"

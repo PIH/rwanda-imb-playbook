@@ -1,0 +1,64 @@
+- name: Configure workers.properties file in /etc/libapache2-mod-jk/ to set tomcat_home to "{{tomcat_home}}/{{tomcat_instance_name}}"
+  lineinfile: path=/etc/libapache2-mod-jk/workers.properties line='workers.tomcat_home={{tomcat_home}}' insertafter='# directories'
+
+- name: Configure workers.properties file in /etc/libapache2-mod-jk/ to set java_home to "{{java_home}}"
+  lineinfile: path=/etc/libapache2-mod-jk/workers.properties line='workers.java_home={{java_home}}' insertafter='# you should have a bin and lib directories beneath it'
+
+- name: Configure workers.properties file in /etc/libapache2-mod-jk/ to set ajp_port to {{tomcat_ajp_port}}
+  lineinfile: path=/etc/libapache2-mod-jk/workers.properties line='workers.java_home={{java_home}}' insertafter='# you should have a bin and lib directories beneath it.'
+
+- name: Append configurations to 000-default.conf
+  lineinfile: path=/etc/apache2/sites-available/000-default.conf line='JkMount /{{app_name}} {{app_name}}' insertafter='DocumentRoot'
+
+- name: Append configurations to 000-default.conf
+  lineinfile: path=/etc/apache2/sites-available/000-default.conf line='JkMount /{{app_name}}/ {{app_name}}' insertafter='/{{app_name}} {{app_name}}'
+
+- name: Append configurations to 000-default.conf
+  lineinfile: path=/etc/apache2/sites-available/000-default.conf line='JkMount /{{app_name}}/* {{app_name}}' insertafter='/{{app_name}}/ {{app_name}}'
+
+- name: Disable DocumentRoot access
+  lineinfile: dest=/etc/apache2/sites-available/000-default.conf
+              regexp="DocumentRoot /var/www/html"
+              line="#DocumentRoot /var/www/html"
+              state=present
+
+- name: Configure server admin email
+  lineinfile: dest=/etc/apache2/sites-available/000-default.conf
+              regexp="ServerAdmin webmaster@localhost"
+              line="ServerAdmin {{ sysadmin_email }}"
+              state=present
+
+- name: Append configurations to default-ssl.conf
+  lineinfile: path=/etc/apache2/sites-available/default-ssl.conf line='JkMount /{{app_name}} {{app_name}}' insertafter='DocumentRoot'
+
+- name: Append configurations to default-ssl.conf
+  lineinfile: path=/etc/apache2/sites-available/default-ssl.conf line='JkMount /{{app_name}}/ {{app_name}}' insertafter='/{{app_name}} {{app_name}}'
+
+- name: Append configurations to default-ssl.conf
+  lineinfile: path=/etc/apache2/sites-available/default-ssl.conf line='JkMount /{{app_name}}/* {{app_name}}' insertafter='/{{app_name}}/ {{app_name}}'
+
+- name: Disable DocumentRoot access
+  lineinfile: dest=/etc/apache2/sites-available/default-ssl.conf
+              regexp="DocumentRoot /var/www/html"
+              line="#DocumentRoot /var/www/html "
+              state=present
+
+- name: Disable generated SSL certificates
+  lineinfile: dest=/etc/apache2/sites-available/default-ssl.conf
+              regexp="SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem"
+              line="#SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem"
+              state=present
+
+- name: Configure server admin email
+  lineinfile: dest=/etc/apache2/sites-available/default-ssl.conf
+              regexp="ServerAdmin"
+              line="ServerAdmin {{sysadmin_email}}"
+              state=present
+
+- name: Configure "workers.properties"
+  template:
+    src: "workers.properties.j2"
+    dest: "/etc/libapache2-mod-jk/workers.properties"
+    owner: "root"
+    group: "root"
+    mode: 0644

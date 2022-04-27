@@ -1,0 +1,12 @@
+- name: enable a2enmod
+  apache2_module: state=present name={{item}}
+  with_items:
+    - ssl
+    - rewrite
+
+- name: Enable default-ssl as a site
+  action: shell cd /etc/apache2/sites-available/ && a2ensite default-ssl.conf
+
+- name: Restart apache2 service
+  service: name=apache2 enabled=yes state=restarted
+  ignore_errors: true

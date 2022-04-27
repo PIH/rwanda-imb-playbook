@@ -1,0 +1,34 @@
+worker.list={{app_name}}
+worker.{{app_name}}.port=8009
+worker.{{app_name}}.host=127.0.0.1
+worker.{{app_name}}.type=ajp13
+workers.tomcat_home=/var/lib/tomcat
+workers.java_home=/usr/lib/jvm/java-8-openjdk-amd64
+ps=/
+#
+# Specifies the load balance factor when used with
+# a load balancing worker.
+# Note:
+#  ----> lbfactor must be > 0
+#  ----> Low lbfactor means less work done by the worker.
+worker.{{app_name}}.lbfactor=1
+
+#
+# Specify the size of the open connection cache.
+#worker.{{app_name}}.cachesize
+
+#
+#------ DEFAULT LOAD BALANCER WORKER DEFINITION ----------------------
+#---------------------------------------------------------------------
+#
+
+#
+# The loadbalancer (type lb) workers perform wighted round-robin
+# load balancing with sticky sessions.
+# Note:
+#  ----> If a worker dies, the load balancer will check its state
+#        once in a while. Until then all work is redirected to peer
+#        workers.
+worker.loadbalancer.type=lb
+worker.loadbalancer.balance_workers={{app_name}}
+

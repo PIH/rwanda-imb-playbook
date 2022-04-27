@@ -1,0 +1,4 @@
+# Install Java
+
+- name: Java | Install Java
+  apt: name={{ java_version }} state=latest update_cache=yes
