@@ -1,6 +1,8 @@
 - hosts: all
   become: yes
   gather_facts: false
+  vars_files:
+      - ../vars/all_vars.yml
   roles:
-    - base-package
+    - base-packages
     - tomcat
