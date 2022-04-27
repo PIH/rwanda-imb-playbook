@@ -2,8 +2,7 @@
   become: yes
   gather_facts: false
   vars:
-    openmrs_distro_site: "rwinkwavu"qq
-    openmrs_distro_group_id: "org.openmrs.distro"
+    openmrs_distro_site: "rwinkwavu"
 
   vars_files:
       - ../vars/all_vars.yml
