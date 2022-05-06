@@ -6,6 +6,10 @@
     dest: /etc/resolv.conf
     content: nameserver 4.2.2.2
     mode: "0644"
+- name: apt repo and cache on all Ubuntu servers
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+- name: Upgrade all packages on servers
+  apt: upgrade=dist force_apt_get=yes
 - name: base-image | Install base packages
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
