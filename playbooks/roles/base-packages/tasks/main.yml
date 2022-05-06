@@ -6,7 +6,6 @@
     dest: /etc/resolv.conf
     content: nameserver 4.2.2.2
     mode: "0644"
-  apt: name=net-tools update_cache=yes state=latest
 - name: base-image | Install base packages
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
