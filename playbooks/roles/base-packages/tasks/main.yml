@@ -1,5 +1,15 @@
 # Install base packages
-
+- name: ping test_command
+  action: ping
+- name: Set temporary nameserver to 4.2.2.2
+  copy:
+    dest: /etc/resolv.conf
+    content: nameserver 4.2.2.2
+    mode: "0644"
+- name: apt repo and cache on all Ubuntu servers
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+- name: Upgrade all packages on servers
+  apt: upgrade=dist force_apt_get=yes
 - name: base-image | Install base packages
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
@@ -7,9 +17,12 @@
     - zip
     - ntp
     - ntpdate
+    - pv
+    - openssh-server
+    - vim
+    - net-tools
 
 # Ensure timezone is configured correctly
-
 - name: NTP | Delete localtime file
   shell: rm -rf /etc/localtime
 

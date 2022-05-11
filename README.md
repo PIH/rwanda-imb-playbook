@@ -1,3 +1,5 @@
+
+
 # rwanda-imb-playbook
 Ansible playbook to install OpenMRS and other Ubuntu server packages
 
@@ -20,7 +22,7 @@ To run the playboook:
     
     **./deploy-package/sh test vagrant java** 
 
-**Roles that can be ran are defined in**
+**Roles that can be run are defined in**
 * apache.yml  
 * create-database.yml  
 * java.yml  mysql.yml  
