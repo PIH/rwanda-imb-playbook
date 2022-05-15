@@ -11,8 +11,9 @@
 
 - name: Users | Create {{ tomcat_group }} group
   group: name={{ tomcat_group }} state=present
-
 - name: Users | Create {{ tomcat_user }} user
+
+
 - name: Tomcat | Install tomcat package
   shell: rm -fR {{ tomcat_home }} && mv /tmp/{{ tomcat_package }} {{ tomcat_home }}
 
