@@ -9,6 +9,10 @@
 - name: Tomcat | Download and unzip
   unarchive: src={{ tomcat_url }} dest=/tmp remote_src=yes
 
+- name: Users | Create {{ tomcat_group }} group
+  group: name={{ tomcat_group }} state=present
+
+- name: Users | Create {{ tomcat_user }} user
 - name: Tomcat | Install tomcat package
   shell: rm -fR {{ tomcat_home }} && mv /tmp/{{ tomcat_package }} {{ tomcat_home }}
 
@@ -40,7 +44,7 @@
 
 # configure Tomcat
 - name: Tomcat | Ensure settings.xml file is installed
-  template: src=settings.xml.j2 dest=/tmp/settings.xml owner={{ tomcat_user }} group={{ tomcat_group }}
+  template: src=settings.xml.j2 dest=/tmp/settings.xml owner={{ tomcat_user }} grocd up={{ tomcat_group }}
 
 - name: Tomcat | Configure "setenv.sh"
   template:
