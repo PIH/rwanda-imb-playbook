@@ -1,7 +1,12 @@
 [all]
-192.168.33.25 ansible_ssh_user=vagrant ansible_ssh_port=22
-192.168.33.26 ansible_ssh_user=vagrant ansible_ssh_port=22
-#ip ansible_ssh_user=xxxx ansible_ssh_port=96
-#192.6 ansible_ssh_user=openmrs ansible_ssh_port=91 ansible_ssh_transfer_method=scp
+#192.168.33.25 ansible_ssh_user=vagrant ansible_ssh_port=22
+#192.168.33.26 ansible_ssh_user=vagrant ansible_ssh_port=22
+#Rwink-Test ansible_ssh_host=192.168.0.100 ansible_ssh_user=openmrs ansible_ssh_port=96
+rwink-upgrade-test ansible_ssh_host=192.168.0.100 ansible_ssh_user=openmrs ansible_ssh_port=96
+Kirehe-upgrade-test ansible_ssh_host=192.168.0.100 ansible_ssh_user=openmrs ansible_ssh_port=99
+child-upgrade-test ansible_ssh_host=192.168.0.100 ansible_ssh_user=openmrs ansible_ssh_port=91
+
+# ansible_ssh_transfer_method=scp
 #Child-Test ansible_ssh_host=192.163.33.12 ansible_ssh_user=openmrs ansible_ssh_port=91 ansible_ssh_transfer_method=scp
 #vagrant_server2 ansible_ssh_host=10.110.10.143 ansible_ssh_user=vagrant ansible_ssh_port=22
+

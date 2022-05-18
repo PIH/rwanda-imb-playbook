@@ -10,9 +10,9 @@
   roles:
     - base-packages
     - java
-    - mysql
-    - mysql-databases
-    - mysql-users
+   # - mysql
+   # - mysql-databases
+   # - mysql-users
     - tomcat
     - apache
   tasks:
@@ -32,16 +32,16 @@
     shell: rm -fR {{ openmrs_distro_dir }}/*
 
   - name: OpenMRS Server | Ensure data directory exists
-    file: path={{ openmrs_data_dir }} state=directory owner={{ openmrs_user }} group={{ openmrs_group }} mode=0600 recurse=yes
+    file: path={{ openmrs_data_dir }} state=directory owner={{ openmrs_user }} group={{ openmrs_group }} mode=0755 recurse=yes
 
   - name: OpenMRS Server | Ensure modules directory exists
-    file: path={{ openmrs_data_dir }}/modules state=directory owner={{ openmrs_user }} group={{ openmrs_group }} mode=0600 recurse=yes
+    file: path={{ openmrs_data_dir }}/modules state=directory owner={{ openmrs_user }} group={{ openmrs_group }} mode=0755 recurse=yes
 
   - name: OpenMRS Server | Ensure modules directory is empty
     shell: rm -fR {{ openmrs_data_dir }}/modules/*
 
   - name: OpenMRS Server | Ensure configuration directory exists
-    file: path={{ openmrs_data_dir }}/configuration state=directory owner={{ openmrs_user }} group={{ openmrs_group }} mode=0600 recurse=yes
+    file: path={{ openmrs_data_dir }}/configuration state=directory owner={{ openmrs_user }} group={{ openmrs_group }} mode=0755 recurse=yes
 
   - name: OpenMRS Server | Ensure configuration directory is empty
     shell: rm -fR {{ openmrs_data_dir }}/configuration/*
