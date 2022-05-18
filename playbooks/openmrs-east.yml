@@ -10,9 +10,9 @@
   roles:
     - base-packages
     - java
-   # - mysql
-   # - mysql-databases
-   # - mysql-users
+    - mysql
+    - mysql-databases
+    - mysql-users
     - tomcat
     - apache
   tasks:
