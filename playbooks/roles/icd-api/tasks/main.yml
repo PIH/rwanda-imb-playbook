@@ -1,0 +1,40 @@
+- name:  Ensure /srv dir exists
+  file: path={{ srv_dir }} state=directory owner={{ icdapi_user }}
+
+- name:  Ensure /srv doesn't have icdapi folders dirs
+  shell: rm -rf {{ srv_dir }}/icdapi*
+
+- name: Download icdapi icdapi.tar.gz
+  ansible.builtin.get_url:
+    url: "{{ icdapi_url }}"
+    dest: "{{ srv_dir }}"
+
+- name: Extract the download directory
+  ansible.builtin.unarchive:
+    src: "{{ srv_dir }}/{{ archived_icdapi_package }}"
+    dest: "{{ srv_dir }}"
+    remote_src: yes
+
+- name: Change directory permissions
+  shell: sudo chmod -R 777 {{ srv_dir }}/icdapi/
+
+- name: Change directory ownership
+  shell: sudo chown -R root:root {{ srv_dir }}/icdapi/
+
+- name: Configure icdapi service
+  template:
+    src: icdapi.service.j2
+    dest: "/etc/systemd/system"
+    owner: "{{ icdapi_user }}"
+    group: "{{ icdapi_user }}"
+    mode: 0755
+
+- name: Enable icdapi
+  shell: sudo systemctl enable icdapi
+
+- name: Reload the daemon
+  shell: sudo systemctl daemon-reload
+
+
+- name: start icdapi
+  shell: sudo systemctl start icdapi

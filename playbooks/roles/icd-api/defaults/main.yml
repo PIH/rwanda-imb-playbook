@@ -1,0 +1,4 @@
+icdapi_url: "https://icdcdn.who.int/icdapibinaries/icdapi-2.2.1.tar.gz"
+archived_icdapi_package: icdapi-2.2.1.tar.gz
+srv_dir: /srv
+icdapi_user: root
