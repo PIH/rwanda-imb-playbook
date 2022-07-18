@@ -1,0 +1,6 @@
+maintenance_group_name: openmrs_maintenance_rwanda
+maintenance_username: openmrs_maintenance_rwanda
+maintenance_password: $6$VyBDbybY.2aaGgyu$DG2B9pM7B.USb5WMSFqFR51o6lJE34BmqWv.myvCjqDHGSAdlr3g2dtnHKzOseCaE3lycGnDRERWKDaf9OwD11
+maintenance_home_dir: "/home/openmrs_maintenance_rwanda"
+maintenance_git_url: "https://github.com/PIH/RwandaIMB-RsyncMaintenanceTools.git"
+maintenance_cron_user: openmrs_maintenance_rwanda
