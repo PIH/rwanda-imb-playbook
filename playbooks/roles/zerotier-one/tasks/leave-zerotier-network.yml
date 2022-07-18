@@ -1,0 +1,8 @@
+- name: leave network
+  command: "{{ zerotier_cli_path }} leave {{ zerotier_network }} -j"
+  register: _zerotier_leave
+  when: >-
+    zerotier_state in ('present', 'latest') and
+    zerotier_network | default(false, true) and
+    zerotier_network_state == 'absent' and
+    zerotier_network in _zerotier_networks.stdout | from_json | map(attribute='nwid')

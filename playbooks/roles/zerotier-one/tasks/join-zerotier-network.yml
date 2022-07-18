@@ -1,0 +1,8 @@
+- name: join network
+  command: "{{ zerotier_cli_path }} join {{ zerotier_network }} AllowDNS=true -j"
+  register: _zerotier_join
+  when: >-
+    zerotier_state in ('present', 'latest') and
+    zerotier_network | default(false, true) and
+    zerotier_network_state == 'present' and
+    zerotier_network not in _zerotier_networks.stdout | from_json | map(attribute='nwid')
