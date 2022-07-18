@@ -52,7 +52,7 @@
 
 - name: Tomcat | Configure "server.xml"
   template:
-    src: "server.xml-{{ tomcat_package }}.j2"
+    src: "server.xml.j2"
     dest: "{{ tomcat_home }}/conf/server.xml"
     owner: "{{ tomcat_user }}"
     group: "{{ tomcat_group }}"
