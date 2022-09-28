@@ -16,7 +16,7 @@ To run the playboook:
   * run ./deploy-package/sh "production | test" "site" "role_name"
     * For example if I want to install java on a production server in Kirehe, run 
     
-    **./deploy-package/sh production kirehe java**
+    **./deploy-package.sh production kirehe java**
   
     * to run on a test instance
     
