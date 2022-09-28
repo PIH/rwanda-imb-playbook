@@ -8,13 +8,13 @@
       - ../vars/all_vars.yml
 
   roles:
-    - base-packages
-    - java
-    - mysql
-    - mysql-databases
-    - mysql-users
-    - tomcat
-    - apache
+  #  - base-packages
+  #  - java
+  #  - mysql
+  #  - mysql-databases
+  #  - mysql-users
+  #  - tomcat
+  #  - apache
   tasks:
   - name: OpenMRS Database | Restart MySQL
     service: name=mysql state=restarted
@@ -99,4 +99,4 @@
       dest: "{{ openmrs_data_dir }}/openmrs-runtime.properties"
       owner: "{{ openmrs_user }}"
       group: "{{ openmrs_group }}"
-      mode: 0600
+      mode: 0644

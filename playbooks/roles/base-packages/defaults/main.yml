@@ -1,6 +1,6 @@
 ---
 ntp_enabled: true
-ntp_timezone: Africa/Kigali
+ntp_timezone: Africa/Freetown
 
 ntp_daemon: ntp
 

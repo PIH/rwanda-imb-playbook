@@ -1,3 +1,4 @@
+
 - name: Configure workers.properties file in /etc/libapache2-mod-jk/ to set tomcat_home to "{{tomcat_home}}/{{tomcat_instance_name}}"
   lineinfile: path=/etc/libapache2-mod-jk/workers.properties line='workers.tomcat_home={{tomcat_home}}' insertafter='# directories'
 
