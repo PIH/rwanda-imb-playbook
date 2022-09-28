@@ -20,7 +20,7 @@ To run the playboook:
   
     * to run on a test instance
     
-    **./deploy-package/sh test vagrant java** 
+    **./deploy-package.sh test vagrant java** 
 
 **Roles that can be run are defined in**
 * apache.yml  
