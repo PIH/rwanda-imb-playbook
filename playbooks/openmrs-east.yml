@@ -8,7 +8,7 @@
       - ../vars/all_vars.yml
 
   roles:
-    - base-packages
+  #  - base-packages
     - java
     - mysql
     - mysql-databases
