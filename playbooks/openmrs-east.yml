@@ -8,13 +8,15 @@
       - ../vars/all_vars.yml
 
   roles:
-  #  - base-packages
+    - base-packages
     - java
     - mysql
     - mysql-databases
     - mysql-users
     - tomcat
     - apache
+    - canvas_lms
+    - canvas_db
   tasks:
   - name: OpenMRS Database | Restart MySQL
     service: name=mysql state=restarted

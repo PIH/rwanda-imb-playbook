@@ -1,0 +1,59 @@
+---
+- name: Update and upgrade apt packages
+  apt:
+    update_cache: yes
+    upgrade: yes
+
+- name: Install required packages
+  apt:
+    name:
+      - git-core
+      - libxml2-dev
+      - libxslt1-dev
+      - python3-pip
+      - libpq-dev
+      - nodejs
+      - npm
+      - redis-server
+      - memcached
+      - imagemagick
+      - postgresql
+      - postgresql-contrib
+      - g++
+      - libreadline-dev
+      - libicu-dev
+      - libbz2-dev
+      - libsqlite3-dev
+      - zlib1g-dev
+      - libffi-dev
+      - libssl-dev
+      - openssl
+      - libssl-dev
+      - libssl-doc
+    state: present
+- name: Ensure the PostgreSQL service is running
+  service: name=postgresql state=started enabled=yes
+
+- name: Install Yarn globally
+  npm:
+    name: yarn
+    global: yes
+
+- name: Clone Canvas LMS from GitHub
+  git:
+    repo: 'https://github.com/instructure/canvas-lms.git'
+    dest: '/opt/canvas-lms'
+    clone: yes
+    update: yes
+
+- name: Copy example database and domain configuration
+  copy:
+    src: '/opt/canvas-lms/config/{{ item.src }}'
+    dest: '/opt/canvas-lms/config/{{ item.dest }}'
+    remote_src: yes
+  loop:
+    - { src: 'database.yml.example', dest: 'database.yml' }
+    - { src: 'domain.yml.example', dest: 'domain.yml' }
+
+# Add more tasks as needed for the Canvas LMS setup.
+

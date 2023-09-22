@@ -1,0 +1,20 @@
+---
+- name: Ensure PostgreSQL is installed
+  apt:
+    name: postgresql
+    state: present
+
+- name: Create Canvas database user
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_user_password }}"
+    encrypted: yes
+- name: Create Canvas database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+    owner: "{{ db_owner }}"
+
