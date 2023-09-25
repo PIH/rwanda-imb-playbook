@@ -1,0 +1,82 @@
+---
+- name: Update and Upgrade System
+  apt:
+    update_cache: yes
+    upgrade: yes
+
+- name: Install LAMP Stack
+  apt:
+    name:
+      - apache2
+      - mysql-server
+      - php
+      - php-common
+      - php-xmlrpc
+      - php-curl
+      - php-gd
+      - php-intl
+      - php-json
+      - php-ldap
+      - php-mbstring
+      - php-mysql
+      - php-zip
+      - php-soap
+      - php-xml
+    state: present
+
+# Configure and install mysql
+
+- name: Set MySQL root password
+  debconf: name=mysql-server question=mysql-server/root_password value={{ mysql_root_password }} vtype=password
+  no_log: true
+
+- name: Confirm MySQL root password
+  debconf: name=mysql-server question=mysql-server/root_password_again value={{ mysql_root_password }} vtype=password
+  no_log: true
+
+- name: Backup original MySQL configuration
+  command:
+    cmd: cp /etc/mysql/mysqld/mysqld.cnf /etc/mysql/mysqld/mysqld.cnf.backup
+    creates: /etc/mysql/mysqld/mysqld.cnf.backup
+
+- name: Update MySQL configuration
+  template:
+    src: mysqld.cnf.j2
+    dest: /etc/mysql/mysqld/mysqld.cnf
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: yes
+  notify: Restart MySQL
+- name: Copy my.cnf
+  template:
+    src: root_my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+    force: yes
+
+- name: Secure MySQL Installation
+  include_tasks: mysql_secure.yml
+
+- name: Download Moodle
+  get_url:
+    url: https://download.moodle.org/download.php/stable310/moodle-latest-310.tgz
+    dest: /tmp/moodle-latest-310.tgz
+
+- name: Extract Moodle
+  unarchive:
+    src: /tmp/moodle-latest-310.tgz
+    dest: /var/www/html/
+    remote_src: yes
+
+- name: Set Moodle Permissions
+  file:
+    path: /var/www/html/moodle
+    state: directory
+    owner: www-data
+    group: www-data
+    recurse: yes
+    mode: '0755'
+

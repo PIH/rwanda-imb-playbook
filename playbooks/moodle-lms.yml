@@ -8,6 +8,5 @@
   #  hosts: your_target_hosts # Replace with the appropriate hosts or groups from your inventory
   #become: yes
   roles:
-    - canvas_lms
-    - canvas_db
-
+    - moodle-lms
+    - moodle_db
