@@ -1,7 +1,7 @@
 ---
 - hosts: all
   become: yes
-  gather_facts: false
+  gather_facts: yes
   vars_files:
       - ../vars/all_vars.yml
 #- name: Install Canvas LMS on Ubuntu 20.04 LTS
