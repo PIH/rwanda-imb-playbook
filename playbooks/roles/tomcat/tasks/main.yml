@@ -63,6 +63,14 @@
 
 - name: Tomcat | Create Unit file
   template: src=service.j2 dest=/lib/systemd/system/{{ tomcat_user }}.service mode=644
-
+- name: Tomcat | Copy logrotate configuration
+  template:
+    src: "tomcat_logrotate.conf.j2"
+    dest: "/etc/logrotate.d/tomcat"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify:
+    - restart logrotate
 - name: Tomcat | Start Tomcat
   service: name={{ tomcat_user }}.service state=started enabled=yes

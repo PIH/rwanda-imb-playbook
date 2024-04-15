@@ -1,0 +1,17 @@
+# Ansible template for Tomcat logrotate configuration
+
+#{{ ansible_managed | comment }}
+/var/lib/tomcat/logs/*.log /var/lib/tomcat/logs/*.txt /var/lib/tomcat/logs/catalina.out {
+    dairy
+    size 10M
+    rotate 7
+    compress
+    dateext
+    create
+    create 0644 root root
+    postrotate
+        # Example: Restart Tomcat service
+        systemctl restart tomcat.service >/dev/null 2>&1 || true
+    endscript
+}
+
