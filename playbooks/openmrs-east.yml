@@ -15,8 +15,8 @@
     - mysql-users
     - tomcat
     - apache
-    - canvas_lms
-    - canvas_db
+  #  - canvas_lms
+   # - canvas_db
   tasks:
   - name: OpenMRS Database | Restart MySQL
     service: name=mysql state=restarted
